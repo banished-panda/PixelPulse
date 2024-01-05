@@ -1,0 +1,5 @@
+# python stuffs
+__pycache__/
+
+# stupid stuffs
+build.bat
