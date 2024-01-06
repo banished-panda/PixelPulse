@@ -7,9 +7,9 @@ import threading
 import keyboard
 
 baud_rate = 57600
-image_width = 300
-image_height = 200
-scale_factor = 2.8
+image_width = 75
+image_height = 50
+scale_factor = 12
 max_frames = 1
 
 # Initialize pygame
@@ -32,8 +32,6 @@ port = serial.Serial(selected_port, baud_rate, timeout=1)
 
 # Receive size of float as stored on arduino
 arduino_float_size = serial_IO.get_bytes(port, 1)[0]
-print(f'{arduino_float_size=}')
-
 
 # array of float data to be sent to arduino
 '''

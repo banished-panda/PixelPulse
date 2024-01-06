@@ -20,10 +20,18 @@ union Vector3{
 };
 
 typedef union Vector3 Color;
+typedef union Vector3 Point3;
+typedef union Vector3 Direction;
+typedef union Vector3 Vec3;
+
+typedef struct {
+  Point3 origin;
+  Direction dir;
+} Ray;
 
 void setup(){
   Serial.begin(57600);
-  delay(1000);
+  delay(10);
 
   // Send the size of float to PC
   sendByte(FLOAT_SIZE);
