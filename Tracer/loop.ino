@@ -1,7 +1,5 @@
 void loop(){
 
-  //delay(1000);
-
   // Send ready signal
   sendMessage("READY");
 
@@ -12,19 +10,16 @@ void loop(){
     // Receive a list of floats
     int num_floats = getByte();
     getFloats(data, num_floats);
-    // for(int i =0; i < num_floats; i++){
-    //   sendDebugMessage("float received = "+String(data[i]));
-    // }
     sendMessage("OK");
   }
   
   // Send output signal
   sendMessage("OUT");
-  delay(10);
+
+  /* Ready for calculations */
+  image_width = data[0];
+  image_height = data[1];
 
   // Output the pixel data
-  for(int i =0; i < 20; i++){
-    sendByte(i);
-  }
-
+  calculate_frame();
 }

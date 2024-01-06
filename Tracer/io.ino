@@ -35,3 +35,9 @@ void getFloats(float* buffer, int n){
     p[i] = Serial.read();
   }
 }
+
+void writeColor(Color c){
+  sendByte(255 * c.r);
+  sendByte(255 * c.g);
+  sendByte(255 * c.b);
+}

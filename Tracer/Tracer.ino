@@ -4,8 +4,25 @@
 float data[MAX_NUM_DATA];
 int n_items;  // number of items in data
 
+int image_width, image_height;
+
+union Vector3{
+  struct {
+    float x;
+    float y;
+    float z;
+  };
+  struct{
+    float r;
+    float g;
+    float b;
+  };
+};
+
+typedef union Vector3 Color;
+
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(57600);
   delay(1000);
 
   // Send the size of float to PC
