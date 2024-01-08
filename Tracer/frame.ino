@@ -7,15 +7,15 @@ void calculate_frame() {
   /* For now we will assume camera axes are in same direction as world axes */
   /* CAMERA */
   float focal_length = 1.0;
-  float viewport_width = 2.0;
-  float viewport_height = viewport_width / aspect_ratio;
+  float viewport_height = 2.0;
+  float viewport_width = viewport_height * aspect_ratio;
   Point3 camera_center = { 0.0, 0.0, 0.0 };  // Camera at origin
 
   Vec3 viewport_u = { viewport_width, 0, 0 };
   Vec3 viewport_v = { 0, -viewport_height, 0 };
 
   Vec3 pixel_delta_u = scale(viewport_u, 1.0 / image_width);
-  Vec3 pixel_delta_v = scale(viewport_v, 1.0 / image_width);
+  Vec3 pixel_delta_v = scale(viewport_v, 1.0 / image_height);
 
   // Upper left corner of viewport
   Point3 viewport_upper_left = camera_center;
@@ -49,10 +49,16 @@ void calculate_frame() {
 
 Color ray_color(Ray r) {
 
+  HitRecord record;
+  if(hit_world(r, (Range){0, INFINITY}, &record)){
+    return scale(add((Vec3){1, 1, 1}, record.normal), 0.5);
+  }
+
+
   Direction unit_direction = unit_vec(r.dir);
   float a = unit_direction.y * 0.5 + 0.5;
-  Color upper_sky = { 0.5, 0.7, 1.0};
-  Color lower_sky = { 1.0, 1.0, 1.0};
+  Color upper_sky = get_Vec3(SKY_UPPER_COLOR);
+  Color lower_sky = get_Vec3(SKY_LOWER_COLOR);
   return add(
     scale(upper_sky, a),
     scale(lower_sky, 1 - a));

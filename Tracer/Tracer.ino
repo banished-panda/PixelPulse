@@ -29,6 +29,18 @@ typedef struct {
   Direction dir;
 } Ray;
 
+typedef struct {
+  Point3 point;
+  Direction normal;
+  float t;
+  bool front_face;
+} HitRecord;
+
+typedef struct {
+  float min_val;
+  float max_val;
+} Range;
+
 void setup(){
   Serial.begin(57600);
   delay(10);

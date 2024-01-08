@@ -7,10 +7,19 @@ import threading
 import keyboard
 
 baud_rate = 57600
-image_width = 75
-image_height = 50
-scale_factor = 12
+image_width = 400
+image_height = 255
+scale_factor = 2
 max_frames = 1
+
+upper_sky_color = [242, 102, 102]
+lower_sky_color = [109, 158, 191]
+
+sphere_list = [
+    # x, y, z, radius,
+    [0.0, 0.0, -1.0, 0.5],
+    [0.0, -100.5, -1.0, 100.0],
+]
 
 # Initialize pygame
 pygame.init()
@@ -36,10 +45,32 @@ arduino_float_size = serial_IO.get_bytes(port, 1)[0]
 # array of float data to be sent to arduino
 '''
 Structure of data:
-1. Image width
-2. Image height
+1.  Image width
+2.  Image height
+3.  SkyColor1 R (UP)
+4.  SkyColor1 G (UP)
+5.  SkyColor1 B (UP)
+6.  SkyColor2 R (DOWN)
+7.  SkyColor2 G (DOWN)
+8.  SkyColor2 B (DOWN)
+9.  Number of spheres
+10. Stride (in no. of floats)
 '''
-float_data = [image_width, image_height]
+float_data = [
+    image_width,
+    image_height,
+]
+for c in upper_sky_color:
+    float_data.append(c/255.0)
+for c in lower_sky_color:
+    float_data.append(c/255.0)
+float_data.append(len(sphere_list))
+float_data.append(len(sphere_list[0]) if len(sphere_list) != 0 else 0)
+for sphere in sphere_list:
+    for val in sphere:
+        float_data.append(val)
+
+
 num_pixels = image_height * image_height
 
 def update_image():
@@ -61,6 +92,7 @@ def update_image():
         # Send the number of floats to be received first
         serial_IO.send_bytes(port, num_floats.to_bytes(1, 'little'))
         serial_IO.send_floats(port, float_data, arduino_float_size)
+        print(float_data)
         # for i in range(num_floats):
         #     print(serial_IO.get_debug_message(port))
         serial_IO.wait_for_bytes(port, b'OK')

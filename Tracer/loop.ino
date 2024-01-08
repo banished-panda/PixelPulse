@@ -17,8 +17,8 @@ void loop(){
   sendMessage("OUT");
 
   /* Ready for calculations */
-  image_width = data[0];
-  image_height = data[1];
+  image_width = data[IMG_WIDTH];
+  image_height = data[IMG_HEIGHT];
 
   // Output the pixel data
   calculate_frame();
