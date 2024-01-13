@@ -152,6 +152,9 @@ bool hit_world(Ray r, Range t_range, HitRecord *record){
 
     - contains
     - surrounds
+    - clamp
+    - random utils
+    - gamma_correction (gamma2)
 
 ********************************/
 
@@ -208,4 +211,11 @@ Vec3 random_Vec3_on_hemisphere(Vec3 normal){
     return v;
   else
     return scale(v, -1);
+}
+Color gamma_corrected(Color c){
+  return (Color){
+    sqrt(c.r),
+    sqrt(c.g),
+    sqrt(c.b),
+  };
 }

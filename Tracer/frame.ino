@@ -57,7 +57,8 @@ void calculate_frame() {
       }
 
       // Write color = cumulativeColor scaled by (1/SAMPLES_PER_PIXEL)
-      writeColor(scale(cumulativeColor, (1.0/SAMPLES_PER_PIXEL)));
+      Color c = scale(cumulativeColor, (1.0/SAMPLES_PER_PIXEL));
+      writeColor(gamma_corrected(c));
     }
   }
 }
