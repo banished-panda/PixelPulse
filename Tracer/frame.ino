@@ -1,4 +1,4 @@
-#define SAMPLES_PER_PIXEL 5
+#define SAMPLES_PER_PIXEL 6
 #define MAX_DEPTH 5
 
 void calculate_frame() {
@@ -69,8 +69,9 @@ Color ray_color(Ray r, int max_depth) {
   }
 
   HitRecord record;
-  if(hit_world(r, (Range){0, INFINITY}, &record)){
-    Vec3 dir = random_Vec3_on_hemisphere(record.normal);
+  if(hit_world(r, (Range){0.001, INFINITY}, &record)){
+    // Vec3 dir = random_Vec3_on_hemisphere(record.normal);
+    Vec3 dir = add(record.normal, random_unit_vector());
     return scale(ray_color((Ray){record.point, dir}, max_depth - 1), 0.5);
   }
 

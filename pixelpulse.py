@@ -7,10 +7,10 @@ import threading
 import keyboard
 
 baud_rate = 57600
-image_width = 40
-image_height = 40
-scale_factor = 12
-max_frames = 10
+image_width = 150
+image_height = 100
+scale_factor = 5
+max_frames = 1
 
 upper_sky_color = [125, 145, 255]
 lower_sky_color = [255, 255, 255]
