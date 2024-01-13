@@ -1,4 +1,4 @@
-#define SAMPLES_PER_PIXEL 1
+#define SAMPLES_PER_PIXEL 5
 #define MAX_DEPTH 5
 
 void calculate_frame() {

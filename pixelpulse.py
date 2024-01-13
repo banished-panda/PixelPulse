@@ -7,9 +7,9 @@ import threading
 import keyboard
 
 baud_rate = 57600
-image_width = 128
-image_height = 128
-scale_factor = 5
+image_width = 40
+image_height = 40
+scale_factor = 12
 max_frames = 10
 
 upper_sky_color = [125, 145, 255]
@@ -102,7 +102,8 @@ def update_image():
     serial_IO.wait_for_bytes(port, b'OUT')
     for y in range(image_height):
         for x in range(image_width):
-            pixel = serial_IO.get_bytes(port, 3)
+            # pixel = serial_IO.get_bytes(port, 3)
+            pixel = serial_IO.get_color(port)
             if first_update:
                 image_array[x, y] = pixel
                 cumulative_image[x, y] = cumulative_image[x, y] + pixel

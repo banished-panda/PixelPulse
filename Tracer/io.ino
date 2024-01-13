@@ -37,7 +37,12 @@ void getFloats(float* buffer, int n){
 }
 
 void writeColor(Color c){
-  sendByte(255 * c.r);
-  sendByte(255 * c.g);
-  sendByte(255 * c.b);
+  long color = 0b01111111000000010000000100000001;
+  long r = 255 * c.r;
+  long g = 255 * c.g;
+  long b = 255 * c.b;
+  color = color | ((r & 0b11111111) << 0);
+  color = color | ((g & 0b11111111) << 8);
+  color = color | ((b & 0b11111111) << 16);
+  Serial.println(color);
 }
