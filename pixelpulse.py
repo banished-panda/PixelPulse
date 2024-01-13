@@ -7,13 +7,13 @@ import threading
 import keyboard
 
 baud_rate = 57600
-image_width = 40
-image_height = 40
-scale_factor = 12
-max_frames = 1
+image_width = 128
+image_height = 128
+scale_factor = 5
+max_frames = 10
 
-upper_sky_color = [44, 24, 72]
-lower_sky_color = [238, 147, 30]
+upper_sky_color = [125, 145, 255]
+lower_sky_color = [255, 255, 255]
 
 sphere_list = [
     # x, y, z, radius,
@@ -26,6 +26,8 @@ pygame.init()
 
 # Create a blank image (initially black)
 image_array = np.zeros((image_width, image_height, 3), dtype=np.uint8) + 100
+cumulative_image = np.zeros((image_width, image_height, 3), dtype=np.uint32)
+N = 1
 image_surface = pygame.surfarray.make_surface(image_array)
 
 # Create a window
@@ -73,11 +75,11 @@ for sphere in sphere_list:
 
 num_pixels = image_height * image_height
 
+first_update = True
 def update_image():
 
-    global prv_time
-    global total_time
-    global frame_count
+    global first_update
+    global N
 
     # Wait for arduino to say READY
     serial_IO.wait_for_bytes(port, b'READY') 
@@ -96,16 +98,22 @@ def update_image():
         # for i in range(num_floats):
         #     print(serial_IO.get_debug_message(port))
         serial_IO.wait_for_bytes(port, b'OK')
-        
-
 
     serial_IO.wait_for_bytes(port, b'OUT')
     for y in range(image_height):
         for x in range(image_width):
             pixel = serial_IO.get_bytes(port, 3)
-            image_array[x, y] = pixel
+            if first_update:
+                image_array[x, y] = pixel
+                cumulative_image[x, y] = cumulative_image[x, y] + pixel
+            else:
+                cumulative_image[x, y] = cumulative_image[x, y] + pixel
+                image_array[x, y] = cumulative_image[x, y] / N
         if not running:
             return
+    
+    first_update = False
+    N+=1
 
 running = True
 def update_image_thread():

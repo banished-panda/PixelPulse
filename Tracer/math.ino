@@ -202,3 +202,10 @@ Vec3 random_Vec3_in_unit_sphere(){
 Vec3 random_unit_vector(){
   return unit_vec(random_Vec3_in_unit_sphere());
 }
+Vec3 random_Vec3_on_hemisphere(Vec3 normal){
+  Vec3 v = random_Vec3_in_unit_sphere();
+  if(dot(v, normal) > 0)
+    return v;
+  else
+    return scale(v, -1);
+}

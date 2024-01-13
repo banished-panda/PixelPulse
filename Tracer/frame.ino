@@ -1,4 +1,5 @@
-#define SAMPLES_PER_PIXEL 10
+#define SAMPLES_PER_PIXEL 1
+#define MAX_DEPTH 5
 
 void calculate_frame() {
 
@@ -52,7 +53,7 @@ void calculate_frame() {
         Ray r = { camera_center, ray_dirirection };
 
         // cumulatively add calulated color for ray
-        cumulativeColor = add(cumulativeColor, ray_color(r));
+        cumulativeColor = add(cumulativeColor, ray_color(r, MAX_DEPTH));
       }
 
       // Write color = cumulativeColor scaled by (1/SAMPLES_PER_PIXEL)
@@ -61,11 +62,16 @@ void calculate_frame() {
   }
 }
 
-Color ray_color(Ray r) {
+Color ray_color(Ray r, int max_depth) {
+
+  if(max_depth <= 0){
+    return (Color){0.0, 0.0, 0.0};
+  }
 
   HitRecord record;
   if(hit_world(r, (Range){0, INFINITY}, &record)){
-    return scale(add((Vec3){1, 1, 1}, record.normal), 0.5);
+    Vec3 dir = random_Vec3_on_hemisphere(record.normal);
+    return scale(ray_color((Ray){record.point, dir}, max_depth - 1), 0.5);
   }
 
 
