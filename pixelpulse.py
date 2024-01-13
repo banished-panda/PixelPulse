@@ -7,13 +7,13 @@ import threading
 import keyboard
 
 baud_rate = 57600
-image_width = 400
-image_height = 255
-scale_factor = 2
+image_width = 40
+image_height = 40
+scale_factor = 12
 max_frames = 1
 
-upper_sky_color = [242, 102, 102]
-lower_sky_color = [109, 158, 191]
+upper_sky_color = [44, 24, 72]
+lower_sky_color = [238, 147, 30]
 
 sphere_list = [
     # x, y, z, radius,

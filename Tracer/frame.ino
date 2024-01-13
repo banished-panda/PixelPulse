@@ -1,3 +1,5 @@
+#define SAMPLES_PER_PIXEL 10
+
 void calculate_frame() {
 
   float aspect_ratio = float(image_width) / image_height;
@@ -31,18 +33,30 @@ void calculate_frame() {
   for (int y = 0; y < image_height; y++) {
     for (int x = 0; x < image_width; x++) {
 
-      // Calculate ray
+      // Calculate pixel center on viewport
       Vec3 alongX = scale(pixel_delta_u, x);
       Vec3 alongY = scale(pixel_delta_v, y);
       Point3 pixel_center = add(pixel00_loc, add(alongX, alongY));
-      Direction ray_dirirection = sub(pixel_center, camera_center);
-      Ray r = { camera_center, ray_dirirection };
 
-      // Calulate color for ray
-      Color c = ray_color(r);
+      // Multiple samples per pixel
 
-      // Write color
-      writeColor(c);
+      Color cumulativeColor = {0.0, 0.0, 0.0};
+      for(int i = 0; i < SAMPLES_PER_PIXEL; i++){
+
+        Vec3 randomDX = scale(pixel_delta_u, random_float() - 0.5);
+        Vec3 randomDY = scale(pixel_delta_v, random_float() - 0.5);
+        Point3 pixel_sample = add(pixel_center, add(randomDX, randomDY));
+
+        // Get direction and hence ray
+        Direction ray_dirirection = sub(pixel_sample, camera_center);
+        Ray r = { camera_center, ray_dirirection };
+
+        // cumulatively add calulated color for ray
+        cumulativeColor = add(cumulativeColor, ray_color(r));
+      }
+
+      // Write color = cumulativeColor scaled by (1/SAMPLES_PER_PIXEL)
+      writeColor(scale(cumulativeColor, (1.0/SAMPLES_PER_PIXEL)));
     }
   }
 }

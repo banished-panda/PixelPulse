@@ -163,3 +163,42 @@ bool contains(Range r, float v){
 bool surrounds(Range r, float v){
   return r.min_val < v && v < r.max_val;
 }
+// clamp val withing range
+float clamp(Range r, float val){
+  if(val <= r.min_val) return r.min_val;
+  if(val >= r.max_val) return r.max_val;
+  return val;
+}
+
+
+// 'random' untils
+float random_float(){
+  return random(RAND_MAX) / (RAND_MAX + 1.0);
+}
+float random_float_in_range(Range range){
+  return (range.max_val - range.min_val)*random_float() + range.min_val;
+}
+Vec3 random_Vec3(){
+  return (Vec3){
+    random_float(),
+    random_float(),
+    random_float()
+  };
+}
+Vec3 random_Vec3_range(Range range){
+  return (Vec3){
+    random_float_in_range(range),
+    random_float_in_range(range),
+    random_float_in_range(range)
+  };
+}
+Vec3 random_Vec3_in_unit_sphere(){
+  while(true){
+    Vec3 r = random_Vec3_range((Range){-1.0, 1.0});
+    if(length_squared(r) < 1)
+      return r;
+  }
+}
+Vec3 random_unit_vector(){
+  return unit_vec(random_Vec3_in_unit_sphere());
+}
